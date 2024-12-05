@@ -1,11 +1,16 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/utils/functions.php");
 
-$users = query("SELECT users.id, users.username, users.nik, users.name, users.phone_number, users.role_id, roles.name as role_name
-    FROM users 
-    JOIN roles ON users.role_id = roles.id");
+$user_id = $_SESSION['user_id'];
+$role_name = $_SESSION['role_name'];
 
-$roles = query("SELECT * FROM roles");
+if ($role_name !== 'masyarakat') {
+    $reports = query("SELECT reports.*, users.name FROM reports JOIN users ON users.id = reports.user_id");
+} else {
+    $reports = query(
+        "SELECT reports.*, users.name FROM reports JOIN users ON users.id = reports.user_id WHERE user_id = '$user_id'"
+    );
+}
 
 ?>
 

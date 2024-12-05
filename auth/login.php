@@ -12,40 +12,64 @@
 </head>
 
 
-<body class="bg-gray-200 font-sans text-gray-700">
-    <div class="container mx-auto p-8 flex">
-        <div class="max-w-md w-full mx-auto">
-            <div class="container flex flex-col justify-center items-center">
-                <img src="../assets/images/logo.png " class="mr-3 w-1/4" alt="Logo" />
-                <span class="bg-gradient-to-r text-transparent from-green-500 to-black bg-clip-text">
-                    <h1 class="text-4xl text-center mb-12 font-bold ">Login lur</h1>
-                </span>
+<body>
+    <!--
+  Heads up! 👋
 
-            </div>
+  Plugins:
+    - @tailwindcss/forms
+-->
 
-            <div class="bg-white rounded-lg overflow-hidden shadow-2xl">
-                <div class="p-8">
-                    <form method="POST" action="../utils/auth.php">
-                        <div class="mb-5">
-                            <input placeholder="Username" type="text" name="username" class="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none">
-                        </div>
+<div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-lg">
+    <h1 class="text-center text-2xl font-bold text-[#4A628A] sm:text-3xl">Hospital<span class="text-[#7AB2D3]">KU</span></h1>
 
-                        <div class="mb-5">
-                            <input placeholder="*********" type="password" name="password" class="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none">
-                        </div>
+    <p class="mx-auto mt-4 max-w-md text-center text-gray-500">
+    Hospitalku melayani dengan sepenuh hati tanpa batas 
+    Mulailah perjalanan kesehatan Anda bersama kami hari ini! 🌟
+    </p>
 
-                        <button type="submit" name="login" class="w-full p-3 mt-4 bg-blue-500 text-white rounded shadow hover:bg-blue-600">Login</button>
-                    </form>
-                </div>
+    <form action="../utils/auth.php" method="POST" class="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+      <p class="text-center text-lg font-medium">selamat datang  <br>
+      <span class="font-bold text-lg text-blue-500">Hospitalku</span></p>
 
-                <?php
+      <div>
+        <div class="relative">
+        <input type="text" name="username" 
+        class="form-style w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-md"
+        placeholder="username" 
+        id="logemail" autocomplete="off">
+
+        </div>
+      </div>
+
+      <div>
+        <label for="password" class="sr-only" >Password</label>
+
+        <div class="relative">
+        <input type="password" name="password" 
+        class="form-style w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-md" 
+        placeholder="************" 
+        id="logpass" autocomplete="off" required>
+        </div>
+      </div>
+      <button 
+      class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+      type="submit" name="submit" class="btn mt-4">Submit</button>
+    </form>
+  </div>
+</div>
+<?php
                 if (isset($_GET['notification'])) {
                     echo $_GET['notification'];
                 }
                 ?>
-            </div>
-        </div>
-    </div>
+
+<!-- Pesan error jika login gagal -->
+<?php if (isset($error)) { ?>
+    <p style="color: red; text-align: center;"><?php echo $error; ?></p>
+<?php } ?>
+
 </body>
 
 </html>

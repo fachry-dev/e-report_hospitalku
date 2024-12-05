@@ -4,7 +4,7 @@ global $connection;
 include_once($_SERVER['DOCUMENT_ROOT'] . "/utils/functions.php");
 
 
-if (isset($_POST["login"])) {
+if (isset($_POST["submit"])) {
     $notification = login($_POST);
     if ($notification) {
         header("Location: ../auth/login.php?notification=" . urlencode($notification));

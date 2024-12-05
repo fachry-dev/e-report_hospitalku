@@ -1,6 +1,7 @@
 <?php
 ob_start();
 session_start();
+
 if (!isset($_SESSION['username'])) {
     header('Location:../auth/login.php');
 } elseif ($_SESSION['role_name'] !== "petugas") {
@@ -14,8 +15,8 @@ if (!isset($_GET['page'])) {
     header("Location: http://localhost:8080/admin/index.php?page=dashboard");
 }
 
-include_once($_SERVER['DOCUMENT_ROOT'] . "/layout/navbar.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/layout/sidebar.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/layout/navbar.php");
 
 ?>
 

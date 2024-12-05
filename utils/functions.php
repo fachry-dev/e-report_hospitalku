@@ -1,6 +1,16 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/utils/connection.php");
 
+if (isset($_GET['id'])) {
+    $result = hapus('id', 'reports', $_GET['id']);
+    if ($result > 0) {
+        echo "<script>
+        alert('data berhasil dihapus');
+        window.location.href = '../admin/index.php?page=dashboard'
+        </script>";
+    }
+}
+
 function query($query)
 {
     global $connection;
@@ -44,12 +54,12 @@ function tambah($data, $table, $fields)
         }
     }
 
-    if (isset($_FILES['gambar'])) {
+    if (isset($_FILES['thumbnail'])) {
         $image = upload();
         if ($image === false) {
             return false;
         }
-        $columns[] = 'gambar';
+        $columns[] = 'thumbnail';
         $values[] = "'" . $image . "'";
     }
 
@@ -62,10 +72,10 @@ function tambah($data, $table, $fields)
 
 function upload()
 {
-    $originalName = $_FILES['gambar']['name'];
-    $filesize = $_FILES['gambar']['size'];
-    $error = $_FILES['gambar']['error'];
-    $tmpName = $_FILES['gambar']['tmp_name'];
+    $originalName = $_FILES['thumbnail']['name'];
+    $filesize = $_FILES['thumbnail']['size'];
+    $error = $_FILES['thumbnail']['error'];
+    $tmpName = $_FILES['thumbnail']['tmp_name'];
 
     if (
         $error === 4
@@ -147,7 +157,7 @@ function validateInput($data, $fields, $isUpdate = false)
     return ['valid' => $valid, 'errors' => $errors, 'data' => $data];
 }
 
-function handleFormSubmit($data, $table, $action)
+function handleFormSubmit($data, $table, $action, $redirectTo = 'dashboard')
 {
     // Define field requirements per table
     $tableFields = [
@@ -206,7 +216,7 @@ function handleFormSubmit($data, $table, $action)
                 text: '$successMessage',
                 icon: 'success'
             }).then((result) => {
-                window.location.href = 'index.php?page=$table';
+                window.location.href = 'index.php?page=$redirectTo';
             });
             </script>";
         } else if ($result == -1) {
@@ -258,7 +268,7 @@ function update($table, $data, $where)
     foreach ($data as $column => $value) {
         if ($column === 'password') {
             $value = password_hash($value, PASSWORD_DEFAULT);
-        } elseif ($column === 'gambar' && $_FILES['gambar']['error'] !== 4) {
+        } elseif ($column === 'thumbnail' && $_FILES['thumbnail']['error'] !== 4) {
             $image = upload();
             if (!$image) {
                 return false;
