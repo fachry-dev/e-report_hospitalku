@@ -25,8 +25,10 @@ function query($query)
 
     return $rows;
 }
+
 function tambah($data, $table, $fields)
 {
+
     global $connection;
 
     $columns = [];
@@ -40,10 +42,27 @@ function tambah($data, $table, $fields)
                 $values[] = "'" . $hashedPassword . "'";
             } else {
                 $columns[] = $field;
+
                 $values[] = "'" . htmlspecialchars($data[$field]) . "'";
             }
         }
     }
+
+    if (isset($data['user_id'])) {
+        $columns[] = 'user_id';
+        $values[] = "'" . $data['user_id'] . "'";
+    }
+
+    if (isset($data['status'])) {
+        $columns[] = 'status';
+        $values[] = "'" . $data['status'] . "'";
+    }
+
+    if (isset($data['slug'])) {
+        $columns[] = 'slug';
+        $values[] = "'" . $data['slug'] . "'";
+    }
+
 
     if (isset($data['nik'])) {
         $nik = htmlspecialchars($data["nik"]);
@@ -63,60 +82,92 @@ function tambah($data, $table, $fields)
         $values[] = "'" . $image . "'";
     }
 
+
     $query = "INSERT INTO $table (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $values) . ")";
     $insert = mysqli_query($connection, $query);
     return mysqli_affected_rows($connection);
 }
 
-
-
-function upload()
+function update($table, $data, $where)
 {
+<<<<<<< HEAD
     $originalName = $_FILES['thumbnail']['name'];
     $filesize = $_FILES['thumbnail']['size'];
     $error = $_FILES['thumbnail']['error'];
     $tmpName = $_FILES['thumbnail']['tmp_name'];
+=======
+    global $connection;
+>>>>>>> 739da4dd8c88a30fca3a32c07f3e10a633fa8715
 
-    if (
-        $error === 4
-    ) {
-        echo "<script>
-				alert('pilih gambar terlebih dahulu!');
-			  </script>";
-        return false;
+    if (isset($data['id'])) {
+        unset($data['id']);
+        unset($data['update']);
     }
 
-    $validExtension = ['jpg', 'jpeg', 'png'];
-    $ekstensiGambar = explode('.', $originalName);
-    $ekstensiGambar = strtolower(end($ekstensiGambar));
-    if (!in_array($ekstensiGambar, $validExtension)) {
-        echo "<script>
-				alert('File bukan gambar');
-			  </script>";
-        return false;
+    $fields = [];
+    foreach ($data as $column => $value) {
+        if ($column === 'password') {
+            $value = password_hash($value, PASSWORD_DEFAULT);
+        } elseif ($column === 'thumbnail' && $_FILES['thumbnail']['error'] !== 4) {
+            $image = upload();
+            if (!$image) {
+                return false;
+            }
+            if (!empty($data['old_image'])) {
+                unlink('./img/' . $data['old_image']);
+            }
+            $value = $image;
+        } else {
+            $value = htmlspecialchars($value);
+        }
+
+        $fields[] = "$column = '$value'";
     }
 
-    if ($filesize > 1000000) {
-        echo "<script>
-				alert('Ukuran gambar terlalu besar!');
-			  </script>";
-        return false;
-    }
+    $fields_sql = implode(", ", $fields);
 
-    $imgFolder = 'img/';
-    if (!is_dir($imgFolder)) {
-        mkdir($imgFolder, 0755, true);
-    }
-    $newFilename = uniqid() . '.' . $ekstensiGambar;
-    move_uploaded_file($tmpName, $imgFolder . $newFilename);
 
-    return $newFilename;
+    $where_sql = [];
+    foreach ($where as $key => $val) {
+        $val = htmlspecialchars($val);
+        $where_sql[] = "$key = '$val'";
+    }
+    $where_clause = implode(" AND ", $where_sql);
+
+    $query = "UPDATE $table SET $fields_sql WHERE $where_clause";
+
+    mysqli_query($connection, $query);
+
+    return mysqli_affected_rows($connection);
 }
+
 
 function hapus($identifier, $table, $id)
 {
     global $connection;
+    $id = htmlspecialchars($id);
+    $data = query("SELECT * FROM reports WHERE id='$id'");
+    if (!isset($data)) {
+        return -1;
+    }
+    if (isset($data[0]['thumbnail'])) {
+        unlink("../assets/upload/" . $data['thumbnail']);
+    }
     mysqli_query($connection, "DELETE FROM $table WHERE $identifier='$id'");
+    return mysqli_affected_rows($connection);
+}
+
+function approve($table, $id)
+{
+    global $connection;
+    $id = htmlspecialchars($id);
+
+    $data = query("SELECT * FROM reports WHERE id='$id'");
+    if (!isset($data)) {
+        return -1;
+    }
+
+    update($table, ['status' => 1], ['id' => $id]);
     return mysqli_affected_rows($connection);
 }
 
@@ -186,15 +237,25 @@ function handleFormSubmit($data, $table, $action, $redirectTo = 'dashboard')
         ]
     ];
 
-    // Get table-specific fields and messages
+    if ($table === 'reports') {
+        $data['status'] = 0;
+        $data['user_id'] = $_SESSION['user_id'];
+        $data['slug'] = strtolower(str_replace(" ", "-", $data['title']));
+    }
+
     $fields = $tableFields[$table]['fields'];
+
     $isUpdate = ($action === 'update');
+
+    if (!$isUpdate && isset($fields['old_password'])) {
+        unset($fields['old_password']);
+    }
+
     $validationResult = validateInput($data, $fields, $isUpdate);
 
     $valid = $validationResult['valid'];
     $errors = $validationResult['errors'];
     $data = $validationResult['data'];
-
     // Clean up password fields for update if not provided
     if (empty($data['password']) && $isUpdate) {
         unset($data['password'], $data['password_confirm'], $data['old_password']);
@@ -245,23 +306,30 @@ function handleFormSubmit($data, $table, $action, $redirectTo = 'dashboard')
         echo "<script>
         Swal.fire({
             title: 'Failed',
-            text: 'Data belum lengkap: $errorMessage',
+            text: '$errorMessage',
             icon: 'error'
         });
         </script>";
     }
 }
 
-
-function update($table, $data, $where)
+function upload()
 {
-    global $connection;
+    $originalName = $_FILES['thumbnail']['name'];
+    $filesize = $_FILES['thumbnail']['size'];
+    $error = $_FILES['thumbnail']['error'];
+    $tmpName = $_FILES['thumbnail']['tmp_name'];
 
-    if (isset($data['id'])) {
-        unset($data['id']);
-        unset($data['update']);
+    if (
+        $error === 4
+    ) {
+        echo "<script>
+				alert('pilih gambar terlebih dahulu!');
+			  </script>";
+        return false;
     }
 
+<<<<<<< HEAD
 
 
     $fields = [];
@@ -282,20 +350,56 @@ function update($table, $data, $where)
         }
 
         $fields[] = "$column = '$value'";
+=======
+    $validExtension = ['jpg', 'jpeg', 'png'];
+    $ekstensiGambar = explode('.', $originalName);
+    $ekstensiGambar = strtolower(end($ekstensiGambar));
+    if (!in_array($ekstensiGambar, $validExtension)) {
+        echo "<script>
+				alert('File bukan gambar');
+			  </script>";
+        return false;
+>>>>>>> 739da4dd8c88a30fca3a32c07f3e10a633fa8715
     }
 
-    $fields_sql = implode(", ", $fields);
-
-    $where_sql = [];
-    foreach ($where as $key => $val) {
-        $val = htmlspecialchars($val);
-        $where_sql[] = "$key = '$val'";
+    if ($filesize > 1000000) {
+        echo "<script>
+				alert('Ukuran gambar terlalu besar!');
+			  </script>";
+        return false;
     }
-    $where_clause = implode(" AND ", $where_sql);
 
-    $query = "UPDATE $table SET $fields_sql WHERE $where_clause";
+    $imgFolder = $_SERVER['DOCUMENT_ROOT'] . '/assets/upload/';
 
-    mysqli_query($connection, $query);
+    if (!is_dir($imgFolder)) {
+        mkdir($imgFolder, 0755, true);
+    }
+    $newFilename = uniqid() . '.' . $ekstensiGambar;
+    move_uploaded_file($tmpName, $imgFolder . $newFilename);
 
-    return mysqli_affected_rows($connection);
+    return $newFilename;
+}
+
+function timeAgo($timestamp)
+{
+    $time = strtotime($timestamp);
+    $timeDifference = time() - $time;
+
+    if ($timeDifference < 0) {
+        return 'just now';
+    }
+
+    if ($timeDifference < 60) {
+        return $timeDifference . ' seconds ago';
+    } elseif ($timeDifference < 3600) {
+        return floor($timeDifference / 60) . ' minutes ago';
+    } elseif ($timeDifference < 86400) {
+        return floor($timeDifference / 3600) . ' hours ago';
+    } elseif ($timeDifference < 2592000) {
+        return floor($timeDifference / 86400) . ' days ago';
+    } elseif ($timeDifference < 31536000) {
+        return floor($timeDifference / 2592000) . ' months ago';
+    } else {
+        return floor($timeDifference / 31536000) . ' years ago';
+    }
 }

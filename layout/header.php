@@ -17,8 +17,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     <!-- Modules -->
+<<<<<<< HEAD
     <script src="../script/confirmDelete.js"></script>
     <!-- <script src="../script/title.js"></script> -->
+=======
+    <script src="../script/confirm.js"></script>
+    <script src="../script/title.js"></script>
+>>>>>>> 739da4dd8c88a30fca3a32c07f3e10a633fa8715
 
     <title>Hospitalku</title>
 
