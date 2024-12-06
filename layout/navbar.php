@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
             flex-grow: 1;
             padding: 2rem;
         }
+
         /* Navbar kanan */
         .navbar-right {
             display: flex;
@@ -17,17 +19,12 @@
         }
     </style>
 </head>
+
 <body class="antialiased">
     <!-- Navbar -->
     <nav class="navbar-right mt-2 shadow-md rounded-lg  px-4 py-3 fixed top-0 left-0 right-0 z-50">
         <div class="flex flex-wrap justify-between items-center">
             <div class="flex items-center gap-3 lg:order-2">
-                <a href="index.php?page=create" type="button" class="group inline-flex items-center px-4 py-2 text-sm font-medium text-blue-900 bg-transparent border border-blue-600 rounded hover:bg-blue-600 hover:text-white focus:z-10 focus:ring-2">
-                    <svg class="w-4 h-4 mr-2 text-blue-900 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    tambah laporan
-                </a>
                 <?php
 
                 if ($_SESSION['role_name'] === 'masyarakat') :
@@ -36,7 +33,7 @@
                         <svg class="w-4 h-4 mr-2 text-blue-900 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
-                        Create Report
+                        tambah laporan
                     </a>
 
                 <?php endif ?>
@@ -82,6 +79,7 @@
     </nav>
     <!-- End of the Navbar -->
 
-   
+
 </body>
+
 </html>

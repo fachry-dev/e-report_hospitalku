@@ -1,4 +1,4 @@
-let titleText = "Lapor Heker - ";
+let titleText = "Hospitalku ";
 let speed = 300;
 
 function scrollTitle() {

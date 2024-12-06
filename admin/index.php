@@ -70,7 +70,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/layout/navbar.php");
         include_once("reports.php");
     }
 
+
     if ($_GET['page'] == "create") {
+
         include_once("create-report.php");
     }
 
