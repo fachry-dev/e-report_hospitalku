@@ -1,16 +1,6 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/utils/connection.php");
 
-if (isset($_GET['id'])) {
-    $result = hapus('id', 'reports', $_GET['id']);
-    if ($result > 0) {
-        echo "<script>
-        alert('data berhasil dihapus');
-        window.location.href = '../admin/index.php?page=dashboard'
-        </script>";
-    }
-}
-
 function query($query)
 {
     global $connection;
@@ -90,14 +80,7 @@ function tambah($data, $table, $fields)
 
 function update($table, $data, $where)
 {
-<<<<<<< HEAD
-    $originalName = $_FILES['thumbnail']['name'];
-    $filesize = $_FILES['thumbnail']['size'];
-    $error = $_FILES['thumbnail']['error'];
-    $tmpName = $_FILES['thumbnail']['tmp_name'];
-=======
     global $connection;
->>>>>>> 739da4dd8c88a30fca3a32c07f3e10a633fa8715
 
     if (isset($data['id'])) {
         unset($data['id']);
@@ -208,7 +191,7 @@ function validateInput($data, $fields, $isUpdate = false)
     return ['valid' => $valid, 'errors' => $errors, 'data' => $data];
 }
 
-function handleFormSubmit($data, $table, $action, $redirectTo = 'dashboard')
+function handleFormSubmit($data, $table, $action)
 {
     // Define field requirements per table
     $tableFields = [
@@ -277,7 +260,7 @@ function handleFormSubmit($data, $table, $action, $redirectTo = 'dashboard')
                 text: '$successMessage',
                 icon: 'success'
             }).then((result) => {
-                window.location.href = 'index.php?page=$redirectTo';
+                window.location.href = 'index.php?page=$table';
             });
             </script>";
         } else if ($result == -1) {
@@ -329,28 +312,6 @@ function upload()
         return false;
     }
 
-<<<<<<< HEAD
-
-
-    $fields = [];
-    foreach ($data as $column => $value) {
-        if ($column === 'password') {
-            $value = password_hash($value, PASSWORD_DEFAULT);
-        } elseif ($column === 'thumbnail' && $_FILES['thumbnail']['error'] !== 4) {
-            $image = upload();
-            if (!$image) {
-                return false;
-            }
-            if (!empty($data['old_image'])) {
-                unlink('./img/' . $data['old_image']);
-            }
-            $value = $image;
-        } else {
-            $value = htmlspecialchars($value);
-        }
-
-        $fields[] = "$column = '$value'";
-=======
     $validExtension = ['jpg', 'jpeg', 'png'];
     $ekstensiGambar = explode('.', $originalName);
     $ekstensiGambar = strtolower(end($ekstensiGambar));
@@ -359,7 +320,6 @@ function upload()
 				alert('File bukan gambar');
 			  </script>";
         return false;
->>>>>>> 739da4dd8c88a30fca3a32c07f3e10a633fa8715
     }
 
     if ($filesize > 1000000) {

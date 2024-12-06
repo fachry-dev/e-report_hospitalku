@@ -3,16 +3,15 @@
         <form class="py-5 px-6" method="post" enctype="multipart/form-data">
             <div class="space-y-12">
                 <div class="border-b border-gray-900/10 pb-12">
-                    <h2 class="text-base/7 font-semibold text-gray-900">Buat laporan</h2>
-                    <p class="mt-1 text-sm/6 text-gray-600">Tolong tambahkan laporan baru untuk pasien<br>
-Jika perlu tambahan konteks atau format tertentu, beri tahu saya! 😊</p>
+                    <h2 class="text-base/7 font-semibold text-gray-900">Report</h2>
+                    <p class="mt-1 text-sm/6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
 
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div class="col-span-full">
                             <label for="title" class="block text-sm font-medium text-gray-900">Title</label>
                             <div class="mt-2">
                                 <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 w-full">
-                                    <input type="text" name="title" id="title" class="ml-4 block w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="terkena covid">
+                                    <input type="text" name="title" id="title" class="ml-4 block w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="janesmith">
                                 </div>
                             </div>
                         </div>
@@ -22,7 +21,7 @@ Jika perlu tambahan konteks atau format tertentu, beri tahu saya! 😊</p>
                             <div class="mt-2">
                                 <textarea id="content" name="content" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"></textarea>
                             </div>
-                            <p class="mt-3 text-sm/6 text-gray-600">tambahkan laporan tentang penyakit yang dialami </p>
+                            <p class="mt-3 text-sm/6 text-gray-600">Write a few sentences about yourself.</p>
                         </div>
 
                         <div class="col-span-full">

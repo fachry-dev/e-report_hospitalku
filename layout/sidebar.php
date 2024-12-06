@@ -21,7 +21,6 @@
               </svg>laporan selesai 
               </a>
             </li>
-=======
 <!-- Sidebar -->
 <aside class="scrollbar fixed top-0 left-0 z-40 w-72 lg:w-56 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 lg:translate-x-0" aria-label="Sidenav" id="drawer-navigation">
     <div class="overflow-y-auto py-5 px-3 h-full bg-white">
@@ -49,7 +48,6 @@
                     </a>
                 </li>
             <?php endif ?>
->>>>>>> 739da4dd8c88a30fca3a32c07f3e10a633fa8715
             <li>
               <a href="javascript:void(0)" class="flex bg-white hover:bg-blue-400 rounded-xl hover:text-white font-bold text-sm text-gray-900 py-3 px-4">
               <svg  xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" class="text-lg mr-4" viewBox="0 0 24 24">
@@ -123,7 +121,6 @@
                 </a>
             </li>
         </ul>
->>>>>>> 739da4dd8c88a30fca3a32c07f3e10a633fa8715
     </div>
   </aside>
   <script>
